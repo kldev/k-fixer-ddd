@@ -1,0 +1,1 @@
+rm -Rf "src/K.Fixer.Web.Api/bin\\Debug/"

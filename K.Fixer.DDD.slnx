@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Common.Toolkit/Common.Toolkit.csproj" />
+    <Project Path="src/K.Fixer.Application/K.Fixer.Application.csproj" />
+    <Project Path="src/K.Fixer.Domain/K.Fixer.Domain.csproj" />
+    <Project Path="src/K.Fixer.Infrastructure/K.Fixer.Infrastructure.csproj" />
+    <Project Path="src/K.Fixer.Web.Api/K.Fixer.Web.Api.csproj" />
+    <Project Path="src/K.Fixer.Web.Seed/K.Fixer.Web.Seed.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/K.Fixer.Web.Api.Tests/K.Fixer.Web.Api.Tests.csproj" />
+  </Folder>
+</Solution>
