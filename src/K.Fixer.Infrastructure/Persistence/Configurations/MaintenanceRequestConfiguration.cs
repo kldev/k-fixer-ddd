@@ -5,6 +5,7 @@ using K.Fixer.Infrastructure.Persistence.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace K.Fixer.Infrastructure.Persistence.Configurations;
 
@@ -14,6 +15,8 @@ public class MaintenanceRequestConfiguration : IEntityTypeConfiguration<Maintena
     {
         builder.ToTable("maintenance_requests");
         builder.ConfigureAggregateRootFields();
+        
+  
 
         builder.Property(z => z.Title)
             .HasColumnName("title")

@@ -3,6 +3,7 @@ using K.Fixer.Domain.Maintenance.Aggregates.MaintenanceRequest;
 using K.Fixer.Domain.Maintenance.Repositories;
 using K.Fixer.Domain.PropertyManagement.Aggregates.Building;
 using K.Fixer.Infrastructure.Persistence;
+using K.Fixer.Infrastructure.Persistence.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -49,7 +50,8 @@ public sealed class MaintenanceRequestRepository : IMaintenanceRequestRepository
         CancellationToken ct)
     {
         var query = GetQueryable(querySearch);
-
+        
+       
         var companyBuildingIdsQuery = _dbContext.BuildingsReads;
            // .Where(b => b.CompanyId == companyId)
            // .Select(b => b.Id);
@@ -90,14 +92,15 @@ public sealed class MaintenanceRequestRepository : IMaintenanceRequestRepository
 
     private IQueryable<MaintenanceRequest> GetQueryable(string? querySearch)
     {
+        
+        var query = _dbContext.RequestsReads.Where(r => !r.IsDeleted );
+        
         if (!string.IsNullOrWhiteSpace(querySearch))
         {
-            var pattern = $"%{querySearch}%";
-            
-            return _dbContext.Requests.FromSqlInterpolated($"select * from maintenance_requests where title LIKE {pattern}"); 
-                
+            query = query.Where(  z => z.Title.RequestTitleInnerValue().Contains(querySearch));
         }
-        return _dbContext.RequestsReads.Where(r => !r.IsDeleted);
+
+        return query;
     }
 
     public async Task<int> CountAsync(string? querySearch,
@@ -107,6 +110,7 @@ public sealed class MaintenanceRequestRepository : IMaintenanceRequestRepository
         Guid? technicianId, CancellationToken ct)
     {
         var query = GetQueryable(querySearch);
+       
         var companyBuildingIdsQuery = _dbContext.BuildingsReads;
         
         if (companyId != null)

@@ -7,6 +7,7 @@ using K.Fixer.Infrastructure.Persistence.Entities;
 using K.Fixer.Infrastructure.Persistence.Extensions;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace K.Fixer.Infrastructure.Persistence;
 
@@ -45,5 +46,58 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        ConfigureValueObjects(modelBuilder);
     }
+
+    private void ConfigureValueObjects(ModelBuilder modelBuilder)
+    {
+        modelBuilder
+            .HasDbFunction(() => ValueObjectsExtensions.RequestTitleInnerValue(default))
+            .HasTranslation(args => new SqlFunctionExpression(
+                functionName: "",
+                arguments: args,
+                nullable: false,
+                argumentsPropagateNullability: [false],
+                type: typeof(string),
+                typeMapping: null))
+            .HasParameter("value")
+            .HasStoreType("varchar(200)");
+
+        modelBuilder
+            .HasDbFunction(() => ValueObjectsExtensions.CompanyNameInnerValue(default))
+            .HasTranslation(args => new SqlFunctionExpression(
+                functionName: "",
+                arguments: args,
+                nullable: false,
+                argumentsPropagateNullability: [false],
+                type: typeof(string),
+                typeMapping: null))
+            .HasParameter("value")
+            .HasStoreType("varchar(100)");
+
+        modelBuilder
+            .HasDbFunction(() => ValueObjectsExtensions.ContactEmailInnerValue(default))
+            .HasTranslation(args => new SqlFunctionExpression(
+                functionName: "",
+                arguments: args,
+                nullable: false,
+                argumentsPropagateNullability: [false],
+                type: typeof(string),
+                typeMapping: null))
+            .HasParameter("value")
+            .HasStoreType("varchar(250)");
+
+        modelBuilder
+            .HasDbFunction(() => ValueObjectsExtensions.ContactPhoneInnerValue(default))
+            .HasTranslation(args => new SqlFunctionExpression(
+                functionName: "",
+                arguments: args,
+                nullable: false,
+                argumentsPropagateNullability: [false],
+                type: typeof(string),
+                typeMapping: null))
+            .HasParameter("value")
+            .HasStoreType("varchar(20)");
+    }
+    
 }

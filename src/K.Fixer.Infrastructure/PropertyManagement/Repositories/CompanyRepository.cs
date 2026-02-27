@@ -68,9 +68,12 @@ public class CompanyRepository : ICompanyRepository
 
         if (!string.IsNullOrWhiteSpace(querySearch))
         {
-            var pattern = $"%{querySearch}%";
-            query = _dbContext.Companies.FromSqlInterpolated(
-                $"SELECT * FROM company WHERE name LIKE {pattern} OR contact_email LIKE {pattern} OR tax_id_number like '{pattern}'");
+            query = _dbContext.Companies.Where(z =>
+                z.Name.CompanyNameInnerValue().Contains(querySearch) 
+                || z.ContactEmail.ContactEmailInnerValue().Contains(querySearch) ||
+                z.ContactPhone.ContactPhoneInnerValue().Contains(querySearch)
+                );
+            //   || z.TaxId.Value.Contains(querySearch));
         }
         else
         {

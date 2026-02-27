@@ -1,7 +1,6 @@
-using K.Fixer.Infrastructure.Maintenance.Repositories;
 using K.Fixer.Infrastructure.Persistence;
+using K.Fixer.Infrastructure.PropertyManagement.Repositories;
 using K.Fixer.Web.Api.Tests.Infrastructure;
-using K.Fixer.Web.Seed.FixedValue;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,33 +10,26 @@ using Xunit.Abstractions;
 namespace K.Fixer.Web.Api.Tests.Repositories;
 
 [Collection(PostgresCollection.Name)]
-public class MaintenanceRequestRepositoryTests
+public class CompanyRepositoryTests
 {
     private readonly PostgresFixture _fixture;
     private readonly ITestOutputHelper _output;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public MaintenanceRequestRepositoryTests(PostgresFixture fixture, ITestOutputHelper output)
+    public CompanyRepositoryTests(PostgresFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
         _output = output;
     }
 
     [Fact]
-    public async Task Cam_Load_Request_Filter_By_Title()
+    public async Task Can_Get_Companies_Filter_By_QuerySearch()
     {
         AppDbContext db = await GetAppDbContext();
 
-        var repository = new MaintenanceRequestRepository(db);
+        var repo = new CompanyRepository(db);
+        var result = await repo.GetPagedAsync("Test", 1, 20, CancellationToken.None);
 
-        var result = await repository.GetPagedAsync("value",
-            null,
-            null,
-            1,
-            20,
-            CompanyGuids.Acme, null,
-            CancellationToken.None);
-        
         Assert.NotNull(result);
     }
 
